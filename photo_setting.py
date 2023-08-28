@@ -35,6 +35,7 @@ def get_filename():
 	
 	if filename == "-" :
 		print ("ERROR : no ext : \n",  page_text)
+		return
 
 	print ("filename : ", filename)
 
@@ -50,11 +51,109 @@ def find_date():
 		infos = filen.split("_")
 		date_str = infos[1]
 		time_str = infos[2]
-		print("date ", date_str, "time ", time_str)
+		if not date_str.startswith("20") :
+			print("Invalid date, date is ", date_str, " in filename ", filen)
+			return None
+		year 	= date_str[:4]
+		month  	= date_str[4:6]
+		day		= date_str[6:]
+
+		hour 	= time_str[:2]
+		min		= time_str[2:4]
+		sec		= time_str[4:]
+
+		return Date(int(year), int(month), int(day), int(hour), int(min), int(sec))
+
+	return None
+
+def check_date(date):
+	if date == None:
+		return False
+	if(date.year < 2003 or date.year > 2023):
+		return False
+	if(date.month < 1 or date.month > 12):
+		return False
+	if(date.day < 1 or date.day >30):
+		return False
+	if(date.hour < 1 or date.hour >24):
+		return False
+	if(date.minute < 1 or date.minute >60):
+		return False
+	if(date.second < 1 or date.second >60):
+		return False
+	return True # all test passed
+
+
+def set_date(d):
+	#find the pen : to modify the date
+	# Define the search region
+	search_region = (1470, 217, 449, 304)
+
+	# Search for the image in the specified region
+	image_location = pyautogui.locateOnScreen("pen.png", region=search_region)
+
+	if image_location:
+		center_x = image_location.left + image_location.width  // 2
+		center_y = image_location.top  + image_location.height // 2
+	else:
+		print("Image not found in the specified region.")
+
+	# perform a click on the pen : 
+	pyautogui.leftClick(center_x, center_y)
+
 
 
 time.sleep(3)
-find_date()
+set_date(None)
+
+"""
+# Get the current mouse cursor position
+mouse_x, mouse_y = pyautogui.position()
+
+print("X :", mouse_x)
+print("Y :", mouse_y)
+"""
+
+"""
+top-left : 
+X : 1470
+Y : 217
+
+top-right :
+X : 1919
+Y : 174
+
+bottom-left :
+X : 1472
+Y : 521
+
+bottom-right :
+X : 1919
+Y : 532
+"""
+
+
+
+
+
+
+
+
+
+
+"""
+nb_photos = 0
+time.sleep(3)
+date = find_date()
+if not check_date(date):
+	print ("date is not correct : ", date)
+else:
+	nb_photos += 1
+"""
+
+
+
+
 
 
 
